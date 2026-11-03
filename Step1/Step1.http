@@ -1,0 +1,6 @@
+@Step1_HostAddress = http://localhost:5032
+
+GET {{Step1_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
