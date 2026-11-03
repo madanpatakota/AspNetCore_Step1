@@ -2,10 +2,20 @@ var builder = WebApplication.CreateBuilder();
 
 // Register the built-in OpenAPI document generator.
 builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+
+//builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Expose the OpenAPI document at /openapi/v1.json.
+
+//Expose endponts at /openapi/v1.json
+
+// User interface for openapi document at /swagger/index.html
+
+
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -58,10 +68,12 @@ app.MapDelete("/Deleteproduct/{id}", (int id) =>
     return $"Product with ID {id} has been deleted.";
 });
 
-
-//prepare the swagger
-
-
+////prepare the swagger
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 
 app.Run();
 public record Product(int Id, string Name, decimal Price);
