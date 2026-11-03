@@ -1,6 +1,6 @@
 @Step1_HostAddress = http://localhost:5032
 
-GET {{Step1_HostAddress}}/weatherforecast/
+GET {{Step1_HostAddress}}/products/
 Accept: application/json
 
 ###

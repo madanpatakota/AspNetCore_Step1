@@ -1,23 +1,67 @@
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder();
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+// Register the built-in OpenAPI document generator.
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Expose the OpenAPI document at /openapi/v1.json.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+app.MapGet("/", () => "API is running.");
 
-app.UseAuthorization();
 
-app.MapControllers();
+
+app.MapGet("/products", () => new[] {
+      new { Id = 1, Name = "Laptop", Price = 999.99m },
+      new { Id = 2, Name = "Keyboard", Price = 49.99m },
+      new { Id = 3, Name = "Mouse", Price = 24.99m } })
+    .WithSummary("Gets all products")
+    .WithDescription("Returns the available products.");
+
+app.MapGet("/products/{id}", (int id) => new
+{
+    Id = id,
+    Name = $"Product {id}",
+    Price = 19.99m
+})
+    .WithSummary("Gets a product by ID")
+    .WithDescription("Returns a product for the specified ID.");
+
+app.MapPost("/Createproduct", (Product product) => {
+    // Implementation for creating a new product
+    List<Product> products = new List<Product>();
+    products.Add(product);
+    return products;
+});
+
+//Update Product
+app.MapPut("/Updateproduct/{id}", (int id, Product updatedProduct) =>
+{
+    // Implementation for updating a product
+    return new Product(id, updatedProduct.Name, updatedProduct.Price);
+});
+
+
+app.MapPatch("/Patchproduct/{id}", (int id, Product updatedProduct) =>
+{
+    // Implementation for patching a product
+    return new Product(id, updatedProduct.Name, updatedProduct.Price);
+});
+
+app.MapDelete("/Deleteproduct/{id}", (int id) =>
+{
+    // Implementation for deleting a product
+    return $"Product with ID {id} has been deleted.";
+});
+
+
+//prepare the swagger
+
+
 
 app.Run();
+public record Product(int Id, string Name, decimal Price);
